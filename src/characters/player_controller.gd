@@ -32,6 +32,10 @@ signal player_died()
 ## Player FSM states.
 enum State { IDLE, MOVING, ATTACKING, DEAD }
 
+## Eight compass directions for sprite selection (E=0 clockwise to NE=7).
+## Indexed so that _vec_to_direction() sector math maps directly: E=0, SE=1, … NE=7.
+enum Direction { E = 0, SE = 1, S = 2, SW = 3, W = 4, NW = 5, N = 6, NE = 7 }
+
 # ---------------------------------------------------------------------------
 # Exports
 # ---------------------------------------------------------------------------
@@ -45,6 +49,7 @@ enum State { IDLE, MOVING, ATTACKING, DEAD }
 # ---------------------------------------------------------------------------
 
 var _state: State = State.IDLE
+var _facing: Direction = Direction.S
 
 # ---------------------------------------------------------------------------
 # @onready variables
@@ -89,6 +94,9 @@ func _draw() -> void:
 	if health_component:
 		var hp_text: String = "HP:%d/%d" % [health_component.current_health, health_component.stats.max_hp]
 		draw_string(font, Vector2(-20, 30), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color.YELLOW)
+	var dir_angle: float = _facing * (PI / 4.0)
+	var dir_vec: Vector2 = Vector2(cos(dir_angle), sin(dir_angle)) * 14.0
+	draw_line(Vector2.ZERO, dir_vec, Color.YELLOW, 2.0)
 
 func _physics_process(_delta: float) -> void:
 	if _state == State.DEAD:
@@ -127,6 +135,17 @@ func set_spawn_position(pos: Vector2) -> void:
 # Private methods
 # ---------------------------------------------------------------------------
 
+## Maps a movement vector to the nearest of eight compass directions.
+##
+## Uses atan2 sector math: the circle is divided into 8 equal 45° sectors,
+## with each sector centred on its cardinal/diagonal direction.
+## Returns [enum Direction] matching the enum integer layout (E=0 clockwise to NE=7).
+##
+## Pure function — safe to call from unit tests without a scene.
+static func _vec_to_direction(v: Vector2) -> Direction:
+	var a: float = fmod(v.angle() + TAU, TAU)
+	return (int((a + PI / 8.0) / (PI / 4.0)) % 8) as Direction
+
 ## Returns the current movement input vector from [InputMapManager].
 ## Extracted as a seam so tests can call [method _process_movement] directly.
 func _get_move_input() -> Vector2:
@@ -149,6 +168,10 @@ func _process_movement(move_vec: Vector2) -> void:
 	if move_vec != Vector2.ZERO:
 		velocity = move_vec * stats.spd
 		_state = State.MOVING
+		var new_facing: Direction = _vec_to_direction(move_vec)
+		if new_facing != _facing:
+			_facing = new_facing
+			queue_redraw()
 	else:
 		velocity = Vector2.ZERO
 		_state = State.IDLE

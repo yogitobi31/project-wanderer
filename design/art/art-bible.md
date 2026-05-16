@@ -1,7 +1,7 @@
 # Art Bible: 유랑단 (The Wandering Band)
 
 *Created: 2026-04-16*
-*Status: In Progress*
+*Status: Approved*
 *Engine: Godot 4.6 / GDScript / Compatibility Renderer*
 *Platform: PC (Steam)*
 

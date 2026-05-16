@@ -60,6 +60,7 @@ const ENEMY_ATTACK_ACTIVE_DURATION: float = 0.2
 @onready var health_component: Node = $HealthComponent
 @onready var _attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var _attack_active_timer: Timer = $AttackActiveTimer
+@onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
 # ---------------------------------------------------------------------------
 # Private state
@@ -88,6 +89,8 @@ func _ready() -> void:
 		"EnemyAI: AttackCooldownTimer child missing on %s" % get_path())
 	assert(is_instance_valid(_attack_active_timer),
 		"EnemyAI: AttackActiveTimer child missing on %s" % get_path())
+	assert(is_instance_valid(_animation_player),
+		"EnemyAI: AnimationPlayer child missing on %s" % get_path())
 	navigation_agent.avoidance_enabled = false
 	if is_instance_valid(detection_area):
 		detection_area.body_entered.connect(_on_detection_area_body_entered)
@@ -98,6 +101,8 @@ func _ready() -> void:
 		hitbox_area.area_entered.connect(_on_hitbox_area_entered)
 	_attack_cooldown_timer.timeout.connect(_on_attack_cooldown_timeout)
 	_attack_active_timer.timeout.connect(_on_attack_active_timeout)
+	_animation_player.animation_finished.connect(_on_death_animation_finished)
+	_setup_death_animation()
 
 
 func _physics_process(_delta: float) -> void:
@@ -181,6 +186,23 @@ func _stop_attack() -> void:
 		hitbox_area.monitoring = false
 
 # ---------------------------------------------------------------------------
+# Private - helpers
+# ---------------------------------------------------------------------------
+
+## Builds a 0.5-second fade-out animation for the placeholder visuals.
+## Animates modulate alpha 1→0 then calls queue_free() via animation_finished.
+func _setup_death_animation() -> void:
+	var anim: Animation = Animation.new()
+	anim.length = 0.5
+	var track_idx: int = anim.add_track(Animation.TYPE_VALUE)
+	anim.track_set_path(track_idx, NodePath(".:modulate"))
+	anim.track_insert_key(track_idx, 0.0, Color.WHITE)
+	anim.track_insert_key(track_idx, 0.5, Color(1.0, 1.0, 1.0, 0.0))
+	var lib: AnimationLibrary = AnimationLibrary.new()
+	lib.add_animation(&"death", anim)
+	_animation_player.add_animation_library(&"", lib)
+
+# ---------------------------------------------------------------------------
 # Private - signal handlers
 # ---------------------------------------------------------------------------
 
@@ -208,6 +230,14 @@ func _on_health_depleted() -> void:
 	if is_instance_valid(detection_area):
 		detection_area.monitoring = false
 	set_physics_process(false)
+	collision_layer = 0
+	collision_mask = 0
+	_animation_player.play(&"death")
+
+
+func _on_death_animation_finished(anim_name: StringName) -> void:
+	if anim_name == &"death":
+		queue_free()
 
 
 func _on_detection_area_body_entered(body: Node2D) -> void:

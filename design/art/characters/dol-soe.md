@@ -1,6 +1,6 @@
 # 캐릭터 비주얼 프로필: 돌쇠
 
-> **Status**: Draft
+> **Status**: Approved
 > **Author**: art-director
 > **Date**: 2026-05-16
 > **MVP 동료 번호**: C-2

@@ -64,3 +64,5 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea2D"]
 shape = SubResource("CircleShape2D_detect")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

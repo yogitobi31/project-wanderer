@@ -30,7 +30,7 @@
 #   Superseded entries:     Grep pattern="status: superseded"
 
 version: 1
-last_updated: ""
+last_updated: "2026-04-27"  # updated: ADR-0003 scene-map-ui-overlay-contract
 
 # ─── STATE OWNERSHIP ─────────────────────────────────────────────────────────
 # Who is the authoritative owner of each piece of shared game state.
@@ -43,7 +43,72 @@ last_updated: ""
 # interface: how other systems access this state (read-only property, method call,
 #   signal, shared resource, etc.) — this is the contract other ADRs depend on.
 
-state_ownership: []
+state_ownership:
+  - state: item_definitions
+    status: active
+    owner_system: ItemDB
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    interface: "ItemDB.get(item_id: StringName) -> ItemDefinition (read-only; runtime writes forbidden)"
+    write_access: editor-only
+    referenced_by:
+      - docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+    revised: ""
+
+  - state: npc_states
+    status: active
+    owner_system: NPCRegistry
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    interface: "NPCRegistry.get_npc(npc_id: StringName) -> NPCRecord (read); NPCRegistry.set_state() (owner-only write)"
+    write_access: NPCRegistry-only
+    referenced_by:
+      - docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+    revised: ""
+
+  - state: party_members
+    status: active
+    owner_system: PartyManager
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    interface: "PartyManager.get_companions() -> Array[StringName] (read-only copy); PartyManager.companion_count (int)"
+    write_access: PartyManager-only
+    referenced_by:
+      - docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+    revised: ""
+
+  - state: inventory_items
+    status: active
+    owner_system: Inventory
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    interface: "Inventory.get_quantity(item_id) -> int; Inventory.has_item(item_id, qty) -> bool"
+    write_access: Inventory-only
+    referenced_by:
+      - docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+    revised: ""
+
+  - state: quest_states
+    status: active
+    owner_system: QuestManager
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    interface: "QuestManager.get_state(quest_id) -> QuestState"
+    write_access: QuestManager-only
+    referenced_by:
+      - docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+    revised: ""
+
+  - state: input_bindings
+    status: active
+    owner_system: InputMapManager
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    interface: "InputMapManager.get_move_vector() -> Vector2; InputMapManager.is_action_just_pressed(action) -> bool"
+    write_access: InputMapManager-only
+    referenced_by:
+      - docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+    revised: ""
 
 # Example:
 #
@@ -71,7 +136,81 @@ state_ownership: []
 #
 # pattern options: signal | direct_call | event_bus | shared_resource | rpc | none
 
-interfaces: []
+interfaces:
+  - contract: item_definition_read
+    status: active
+    pattern: direct_call
+    producer: ItemDB
+    consumers:
+      - 인벤토리-시스템
+      - 수집-자원-시스템
+      - 퀘스트-상태-머신
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    signal_signature: "ItemDB.get(item_id: StringName) -> ItemDefinition"
+    referenced_by:
+      - docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+    revised: ""
+
+  - contract: npc_state_read
+    status: active
+    pattern: direct_call
+    producer: NPCRegistry
+    consumers:
+      - 대화-시스템
+      - 퀘스트-상태-머신
+      - 동료-AI-시스템
+      - 동료-합류-이벤트
+      - 월드-조건-시스템
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    signal_signature: "NPCRegistry.get_npc(npc_id: StringName) -> NPCRecord"
+    referenced_by:
+      - docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+    revised: ""
+
+  - contract: npc_state_write
+    status: active
+    pattern: direct_call
+    producer: NPCRegistry
+    consumers:
+      - NPCRegistry-owner-only
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    signal_signature: "NPCRegistry.set_state(npc_id: StringName, state: RelationshipState) -> void"
+    referenced_by:
+      - docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+    revised: ""
+
+  - contract: npc_state_notification
+    status: active
+    pattern: signal
+    producer: NPCRegistry
+    consumers:
+      - 대화-시스템
+      - 퀘스트-상태-머신
+      - 동료-AI-시스템
+      - 세이브-로드-시스템
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    signal_signature: "npc_state_changed(npc_id: StringName, new_state: int)"
+    referenced_by:
+      - docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+    revised: ""
+
+  - contract: registry_ready_notification
+    status: active
+    pattern: signal
+    producer: NPCRegistry
+    consumers:
+      - QuestManager
+      - 동료-합류-이벤트
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    signal_signature: "registry_initialized()"
+    referenced_by:
+      - docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+    revised: ""
 
 # Example:
 #
@@ -131,7 +270,17 @@ performance_budgets: []
 # Register an API decision when the choice is non-obvious and other ADRs might
 # make a different choice for the same purpose without knowing this was decided.
 
-api_decisions: []
+api_decisions:
+  - purpose: autoload_file_location
+    status: active
+    api: "src/core/[snake_case_name].gd — 스크립트 전용, 씬 파일 없음 (* 접두사)"
+    not: "씬 파일(.tscn) 기반 Autoload 등록"
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    reason: "스크립트 전용 Autoload는 씬 인스턴스화 오버헤드 없이 초기화됨. src/core/ 집중으로 위치 규칙 단순화."
+    referenced_by:
+      - docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+    revised: ""
 
 # Example:
 #
@@ -157,7 +306,50 @@ api_decisions: []
 # Register a pattern when an ADR explicitly bans it AND other ADRs might
 # unknowingly use it (i.e., it's a tempting but wrong approach for this project).
 
-forbidden_patterns: []
+forbidden_patterns:
+  - pattern: unauthorized_autoload_usage
+    status: active
+    description: "Autoload 싱글톤은 4가지 기준(순수 데이터 레지스트리, 팬아웃 3+, 좁은 API, 단순 초기화)을
+      모두 충족한 시스템에만 허용된다. 기준을 충족하지 않는 시스템은 의존성 주입 또는 EventBus를 사용한다."
+    why: "기준 없는 Autoload 확산은 전역 상태를 증가시키고 시스템 간 숨겨진 의존성을 만들어
+      테스트와 리팩터링을 어렵게 한다."
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+
+  - pattern: autoload_as_event_bus
+    status: active
+    description: "Autoload를 시스템 간 이벤트/신호 중계 버스로 사용해서는 안 된다.
+      이벤트 전달은 전용 EventBus 또는 직접 신호 연결을 사용한다."
+    why: "Autoload가 신호 허브가 되면 모든 시스템이 Autoload에 의존하게 되어
+      의존성 그래프가 별 모양으로 수렴하고 순환 의존 위험이 증가한다."
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+
+  - pattern: shallow_copy_autoload_resource
+    status: active
+    description: "Autoload Dictionary에 저장된 Resource를 복사할 때 `duplicate()`(얕은 복사)를
+      사용해서는 안 된다. 반드시 `duplicate_deep()`(Godot 4.5+)을 사용한다."
+    why: "얕은 복사는 내부 Reference 타입 필드를 공유하므로 복사본 수정이 레지스트리 원본을
+      오염시킨다. NPCRecord의 quest_flags Dictionary 등이 해당된다."
+    adr: docs/architecture/adr-0001-data-registry-autoload.md
+    added: "2026-04-19"
+
+  - pattern: unauthorized_service_autoload
+    status: active
+    description: "서비스 Autoload는 S-1~S-4 기준(전역 생명주기 필요, 씬 계층 주입 불가,
+      단일 서비스 책임, 순환 의존 없음)을 모두 충족해야 한다. 기준 미충족 시 씬 내 Node로 구현한다."
+    why: "기준 없는 서비스 Autoload 확산은 전역 상태를 증가시키고 테스트를 어렵게 한다.
+      ADR-0002가 허용된 9개 Autoload를 확정했으며 추가는 이 기준을 통과해야 한다."
+    adr: docs/architecture/adr-0002-foundation-autoload-registration-order.md
+    added: "2026-04-27"
+
+  - pattern: tilemap_node_usage
+    status: active
+    description: "TileMap 노드를 사용해서는 안 된다. 반드시 TileMapLayer를 사용한다."
+    why: "TileMap은 Godot 4.3에서 TileMapLayer로 대체되어 deprecated 상태다.
+      미래 버전에서 제거될 수 있으므로 프로젝트 시작 시점부터 TileMapLayer를 강제한다."
+    adr: docs/architecture/adr-0003-scene-map-ui-overlay-contract.md
+    added: "2026-04-27"
 
 # Example:
 #

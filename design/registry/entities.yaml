@@ -37,7 +37,7 @@
 #   Each entry: name, status, source, referenced_by[], attributes{}, added, revised
 
 version: 1
-last_updated: ""
+last_updated: "2026-04-17"  # updated: 아이템 데이터베이스 GDD 완료
 
 # ─── ENTITIES ────────────────────────────────────────────────────────────────
 # Named game-world objects: enemies, NPCs, characters, factions, bosses.
@@ -139,7 +139,96 @@ formulas: []
 #
 # Required fields: name, status, source, referenced_by, value, unit, added
 
-constants: []
+constants:
+  - name: RelationshipState.UNKNOWN
+    status: active
+    source: design/gdd/NPC-상태-관리.md
+    referenced_by:
+      - design/gdd/NPC-상태-관리.md
+    value: 0
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: RelationshipState.MET
+    status: active
+    source: design/gdd/NPC-상태-관리.md
+    referenced_by:
+      - design/gdd/NPC-상태-관리.md
+    value: 1
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: RelationshipState.QUEST_ACTIVE
+    status: active
+    source: design/gdd/NPC-상태-관리.md
+    referenced_by:
+      - design/gdd/NPC-상태-관리.md
+    value: 2
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: RelationshipState.COMPANION
+    status: active
+    source: design/gdd/NPC-상태-관리.md
+    referenced_by:
+      - design/gdd/NPC-상태-관리.md
+    value: 3
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: RelationshipState.DEPARTED
+    status: active
+    source: design/gdd/NPC-상태-관리.md
+    referenced_by:
+      - design/gdd/NPC-상태-관리.md
+    value: 4
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: RelationshipState.HOSTILE
+    status: active
+    source: design/gdd/NPC-상태-관리.md
+    referenced_by:
+      - design/gdd/NPC-상태-관리.md
+    value: 5
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: ItemCategory.QUEST_ITEM
+    status: active
+    source: design/gdd/아이템-데이터베이스.md
+    referenced_by:
+      - design/gdd/아이템-데이터베이스.md
+    value: 0
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: ItemCategory.RESOURCE
+    status: active
+    source: design/gdd/아이템-데이터베이스.md
+    referenced_by:
+      - design/gdd/아이템-데이터베이스.md
+    value: 1
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
+
+  - name: ItemCategory.CONSUMABLE
+    status: active
+    source: design/gdd/아이템-데이터베이스.md
+    referenced_by:
+      - design/gdd/아이템-데이터베이스.md
+    value: 2
+    unit: enum_value
+    added: "2026-04-17"
+    revised: ""
 
 # Example:
 #

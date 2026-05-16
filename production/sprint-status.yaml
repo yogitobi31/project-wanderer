@@ -53,21 +53,21 @@ stories:
     name: "문서 상태 정리 (art-bible + 동료 프로필 Draft→Approved)"
     file: "design/art/art-bible.md"
     priority: should-have
-    status: backlog
+    status: done
     owner: "art-director"
     estimate_days: 0.5
     blocker: ""
-    completed: ""
+    completed: "2026-05-16"
 
   - id: "S4-6"
     name: "VIS-2 적 사망 AnimationPlayer 구현 (S3-9 carryover)"
     file: "src/gameplay/enemy_ai.gd"
     priority: should-have
-    status: backlog
+    status: done
     owner: "godot-gdscript-specialist"
     estimate_days: 0.5
     blocker: ""
-    completed: ""
+    completed: "2026-05-16"
 
   - id: "S4-7"
     name: "EventBus Foundation epic — story-001 autoload signal contract 구현"
@@ -81,9 +81,9 @@ stories:
 
   - id: "S4-8"
     name: "Production 플레이테스트 세션 1회"
-    file: "production/playtests/session-004-2026-05-xx.md"
+    file: "production/qa/playtests/session-004-2026-05-16-juwon.md"
     priority: should-have
-    status: backlog
+    status: in-progress
     owner: "Juwon"
     estimate_days: 0.5
     blocker: ""
@@ -93,18 +93,18 @@ stories:
     name: "대각선 이동 스프라이트 8방향 전환 (S3-10 carryover)"
     file: "src/core/player_controller.gd"
     priority: nice-to-have
-    status: backlog
+    status: done
     owner: "godot-gdscript-specialist"
     estimate_days: 0.5
     blocker: ""
-    completed: ""
+    completed: "2026-05-16"
 
   - id: "S4-10"
     name: "BUG-0001 push_warning → push_error 수정 (S3-11 carryover)"
     file: "src/"
     priority: nice-to-have
-    status: backlog
+    status: done
     owner: "godot-gdscript-specialist"
     estimate_days: 0.5
     blocker: ""
-    completed: ""
+    completed: "2026-05-16"

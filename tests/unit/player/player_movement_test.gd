@@ -118,3 +118,63 @@ func test_process_movement_idle_to_moving_transition() -> void:
 	# Assert
 	assert_eq(_player._state, PlayerController.State.MOVING,
 		"IDLE -> MOVING: non-zero input must transition to MOVING")
+
+# ---------------------------------------------------------------------------
+# S4-9: _vec_to_direction() — all 8 compass directions
+# Pure function tests; no scene required.
+# ---------------------------------------------------------------------------
+
+func test_vec_to_direction_east() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(1.0, 0.0)),
+		PlayerController.Direction.E, "right vector must map to E")
+
+func test_vec_to_direction_southeast() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(1.0, 1.0)),
+		PlayerController.Direction.SE, "down-right vector must map to SE")
+
+func test_vec_to_direction_south() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(0.0, 1.0)),
+		PlayerController.Direction.S, "down vector must map to S")
+
+func test_vec_to_direction_southwest() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(-1.0, 1.0)),
+		PlayerController.Direction.SW, "down-left vector must map to SW")
+
+func test_vec_to_direction_west() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(-1.0, 0.0)),
+		PlayerController.Direction.W, "left vector must map to W")
+
+func test_vec_to_direction_northwest() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(-1.0, -1.0)),
+		PlayerController.Direction.NW, "up-left vector must map to NW")
+
+func test_vec_to_direction_north() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(0.0, -1.0)),
+		PlayerController.Direction.N, "up vector must map to N")
+
+func test_vec_to_direction_northeast() -> void:
+	assert_eq(PlayerController._vec_to_direction(Vector2(1.0, -1.0)),
+		PlayerController.Direction.NE, "up-right vector must map to NE")
+
+# ---------------------------------------------------------------------------
+# S4-9: _facing updates when direction changes
+# ---------------------------------------------------------------------------
+
+func test_process_movement_updates_facing_on_direction_change() -> void:
+	# Arrange: default facing is S
+	assert_eq(_player._facing, PlayerController.Direction.S)
+	# Act: move right
+	_player._process_movement(Vector2(1.0, 0.0))
+	# Assert
+	assert_eq(_player._facing, PlayerController.Direction.E,
+		"moving right must update _facing to E")
+
+func test_process_movement_facing_unchanged_when_stopped() -> void:
+	# Arrange: prime facing to E
+	_player._process_movement(Vector2(1.0, 0.0))
+	assert_eq(_player._facing, PlayerController.Direction.E)
+	# Act: stop moving
+	_player._process_movement(Vector2.ZERO)
+	# Assert: facing retains last direction
+	assert_eq(_player._facing, PlayerController.Direction.E,
+		"stopping must not change _facing — retain last movement direction")

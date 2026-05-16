@@ -57,9 +57,10 @@ Accepted
 IDLE → FADING_OUT → LOADING → FADING_IN → IDLE
 ```
 
-**PROCESS_MODE_DISABLED 적용**: `get_tree().paused = true`
+**PROCESS_MODE_DISABLED 적용**: 전환 중 씬 루트에 `PROCESS_MODE_DISABLED` 설정 (`set_process_mode(PROCESS_MODE_DISABLED)`)
 - 적용: PlayerController, CompanionAI, EnemyAI, CombatEncounter
 - 제외: SceneTransitionManager (PROCESS_MODE_ALWAYS), AudioManager (BGM fade 계속 실행)
+- 주의: `get_tree().paused`는 사용하지 않음 — 씬 전체가 아닌 개별 노드 제어가 목적
 
 **비동기 로딩**: `ResourceLoader.load_threaded_request()` → `_process()`에서 `load_threaded_get_status()` 폴링 → 완료 시 `change_scene_to_packed()`.
 

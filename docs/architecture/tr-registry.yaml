@@ -24,33 +24,520 @@
 #
 # STATUS VALUES: active | deprecated | superseded-by: TR-[system]-NNN
 
-version: 1
-last_updated: ""
+version: 2
+last_updated: "2026-05-06"
 
-requirements: []
+requirements:
 
-# --- EXAMPLE ENTRIES (remove when first real entries are added) ---
-#
-# - id: TR-combat-001
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Player takes damage from enemies based on attack power minus defence"
-#   created: 2026-03-10
-#   revised: ""
-#   status: active
-#
-# - id: TR-combat-002
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Combo window timing is 0.4 seconds between hits"
-#   created: 2026-03-10
-#   revised: "2026-04-01"
-#   status: active
-#
-# - id: TR-combat-003
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Old damage formula using raw stats"
-#   created: 2026-03-10
-#   revised: ""
-#   status: superseded-by: TR-combat-001
+  # ─── NPC 상태 관리 (NPC-상태-관리.md) ─────────────────────────────────────
+
+  - id: TR-npc-001
+    system: npc
+    gdd: design/gdd/NPC-상태-관리.md
+    requirement: "NPCRegistry Autoload — 모든 NPC 상태(RelationshipState, quest_flags, party_slot)의 전역 단일 접근 경로"
+    adr: ADR-0001
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-npc-002
+    system: npc
+    gdd: design/gdd/NPC-상태-관리.md
+    requirement: "NPCRegistry.get_npc()는 항상 duplicate_deep()으로 스냅샷을 반환 — 호출자가 수정해도 레지스트리 원본 안전"
+    adr: ADR-0001
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-npc-003
+    system: npc
+    gdd: design/gdd/NPC-상태-관리.md
+    requirement: "NPCRegistry.set_state()로 RelationshipState 변경, npc_state_changed(npc_id, old_state, new_state) 신호 발행"
+    adr: ADR-0001
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-npc-004
+    system: npc
+    gdd: design/gdd/NPC-상태-관리.md
+    requirement: "NPCRegistry is_initialized guard — registry_initialized 신호 이전 set_state() 호출 금지, 위반 시 경고 로그"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-npc-005
+    system: npc
+    gdd: design/gdd/NPC-상태-관리.md
+    requirement: "MAX_PARTY_SIZE = 3 — PartyManager 소유, COMPANION 상태 전환 시 companion_count < MAX_PARTY_SIZE 검사"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 아이템 데이터베이스 (아이템-데이터베이스.md) ─────────────────────────
+
+  - id: TR-item-001
+    system: item
+    gdd: design/gdd/아이템-데이터베이스.md
+    requirement: "ItemDB Autoload — 아이템 정의(ItemDefinition Resource)의 전역 읽기 전용 접근 경로"
+    adr: ADR-0001
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-item-002
+    system: item
+    gdd: design/gdd/아이템-데이터베이스.md
+    requirement: "ItemDB.get()/has() 읽기 전용 인터페이스만 노출 — 런타임 아이템 정의 추가/삭제 금지"
+    adr: ADR-0001
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-item-003
+    system: item
+    gdd: design/gdd/아이템-데이터베이스.md
+    requirement: "ItemDB._ready()에서 _validate_definitions() 실행, 정의 오류 시 error_occurred 신호 발행"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 입력 매핑 (입력-매핑-시스템.md) ──────────────────────────────────────
+
+  - id: TR-input-001
+    system: input
+    gdd: design/gdd/입력-매핑-시스템.md
+    requirement: "InputMapManager Autoload — 액션 바인딩·컨텍스트 전환·리바인딩 전역 관리"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-input-002
+    system: input
+    gdd: design/gdd/입력-매핑-시스템.md
+    requirement: "is_ui_active context separation — UI 활성(set_ui_active(true)) 시 gameplay 카테고리 액션 입력 차단"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-input-003
+    system: input
+    gdd: design/gdd/입력-매핑-시스템.md
+    requirement: "ConfigFile 기반 키 바인딩 영속성 — user://input_bindings.cfg 저장/로드"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-input-004
+    system: input
+    gdd: design/gdd/입력-매핑-시스템.md
+    requirement: "physical_keycode 기반 바인딩 저장 (Godot 4.5 best practice — 키보드 레이아웃 독립)"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 오디오 매니저 (오디오-매니저.md) ─────────────────────────────────────
+
+  - id: TR-audio-001
+    system: audio
+    gdd: design/gdd/오디오-매니저.md
+    requirement: "AudioManager Autoload — SFX/BGM 전역 재생 관리, play_sfx()/play_bgm()/stop_bgm() 인터페이스"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-audio-002
+    system: audio
+    gdd: design/gdd/오디오-매니저.md
+    requirement: "3 Audio buses 구조 — Master, Music, SFX, set_volume(bus_name, linear_value) 제어"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-audio-003
+    system: audio
+    gdd: design/gdd/오디오-매니저.md
+    requirement: "SFX pool 8개 — 동시 재생 지원, 모두 사용 중이면 가장 오래된 것 재사용"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 인벤토리 (인벤토리-시스템.md) ───────────────────────────────────────
+
+  - id: TR-inv-001
+    system: inv
+    gdd: design/gdd/인벤토리-시스템.md
+    requirement: "Inventory Autoload — 플레이어 아이템 수량 전역 관리"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-inv-002
+    system: inv
+    gdd: design/gdd/인벤토리-시스템.md
+    requirement: "Dictionary 기반 {item_id→quantity} 저장, add_item()/remove_item()/has_item()/get_quantity() 인터페이스"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 파티 매니저 (파티-매니저.md) ─────────────────────────────────────────
+
+  - id: TR-party-001
+    system: party
+    gdd: design/gdd/파티-매니저.md
+    requirement: "PartyManager Autoload — 파티 멤버십 전역 관리, register_companion()/is_recruited()/get_companions()"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-party-002
+    system: party
+    gdd: design/gdd/파티-매니저.md
+    requirement: "register_companion() — companion_count >= MAX_PARTY_SIZE(3)이면 실패, COMPANION 상태 검증"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 이벤트 버스 (이벤트-버스.md) ─────────────────────────────────────────
+
+  - id: TR-ebus-001
+    system: ebus
+    gdd: design/gdd/이벤트-버스.md
+    requirement: "EventBus Autoload — companion_join_requested(companion_id: StringName) 크로스-시스템 신호 정의"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 퀘스트 상태 머신 (퀘스트-상태-머신.md) ──────────────────────────────
+
+  - id: TR-quest-001
+    system: quest
+    gdd: design/gdd/퀘스트-상태-머신.md
+    requirement: "QuestManager Autoload — 퀘스트별 3-state FSM (NOT_STARTED/ACTIVE/COMPLETED) 관리"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-quest-002
+    system: quest
+    gdd: design/gdd/퀘스트-상태-머신.md
+    requirement: "완료 조건 자동 평가 — notify_enemy_killed()/notify_location_visited() 메서드로 조건 갱신"
+    adr: ADR-0002
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 씬 전환 (씬전환-시스템.md) ──────────────────────────────────────────
+
+  - id: TR-scene-001
+    system: scene
+    gdd: design/gdd/씬전환-시스템.md
+    requirement: "씬 전환 중 PROCESS_MODE_DISABLED — AudioManager 제외 모든 게임플레이 노드 일시 정지"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-scene-002
+    system: scene
+    gdd: design/gdd/씬전환-시스템.md
+    requirement: "ResourceLoader.load_threaded_request() 비동기 씬 로딩 — _process 폴링으로 진행률 확인"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-scene-003
+    system: scene
+    gdd: design/gdd/씬전환-시스템.md
+    requirement: "4-state FSM: IDLE → FADING_OUT → LOADING → FADING_IN → IDLE 전환 순서 고정"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-scene-004
+    system: scene
+    gdd: design/gdd/씬전환-시스템.md
+    requirement: "SpawnPoint 그룹 명명 규칙 — SpawnPoint_{id} 노드, spawn_id 없으면 SpawnPoint_Default 폴백"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 맵·지역 (맵-지역-시스템.md) ─────────────────────────────────────────
+
+  - id: TR-map-001
+    system: map
+    gdd: design/gdd/맵-지역-시스템.md
+    requirement: "TileMapLayer + NavigationRegion2D 맵 구성 — TileMap 사용 금지 (4.3에서 deprecated)"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-map-002
+    system: map
+    gdd: design/gdd/맵-지역-시스템.md
+    requirement: "맵 씬 필수 노드 — Area2D 포탈, EnemySpawnZone, SpawnPoint 그룹"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-map-003
+    system: map
+    gdd: design/gdd/맵-지역-시스템.md
+    requirement: "포탈 진입 조건 — DialogueManager.is_active() == false 확인 후 씬 전환 허용"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 대화 시스템 (대화-시스템.md) ─────────────────────────────────────────
+
+  - id: TR-dial-001
+    system: dial
+    gdd: design/gdd/대화-시스템.md
+    requirement: "DialogueManager CanvasLayer 오버레이 + grab_focus() 포커스 이동 + is_active로 씬 전환 차단"
+    adr: ADR-0003
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 체력·데미지 (체력-데미지-시스템.md) ─────────────────────────────────
+
+  - id: TR-health-001
+    system: health
+    gdd: design/gdd/체력-데미지-시스템.md
+    requirement: "HealthComponent 컴포넌트 패턴 — 플레이어·동료·적 모두 동일한 HealthComponent 자식 노드 사용"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-health-002
+    system: health
+    gdd: design/gdd/체력-데미지-시스템.md
+    requirement: "데미지 공식: final_damage = max(1, attack_data[\"damage\"] - target_defense) — 최소 1 보장"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-health-003
+    system: health
+    gdd: design/gdd/체력-데미지-시스템.md
+    requirement: "health_depleted() 발행 후 사망 처리(애니메이션·리스폰·전투 종료)는 캐릭터 컨트롤러에 위임"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 히트박스·충돌 감지 (히트박스-충돌-감지.md) ─────────────────────────
+
+  - id: TR-hitbox-001
+    system: hitbox
+    gdd: design/gdd/히트박스-충돌-감지.md
+    requirement: "모든 전투 판정은 Area2D Hitbox/Hurtbox 기반 — PhysicsBody 직접 충돌로 데미지 계산 금지"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-hitbox-002
+    system: hitbox
+    gdd: design/gdd/히트박스-충돌-감지.md
+    requirement: "7개 Physics 레이어 번호 고정: 1=world, 2=player_body, 3=enemy_body, 4=player_hitbox, 5=enemy_hitbox, 6=player_hurtbox, 7=enemy_hurtbox"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-hitbox-003
+    system: hitbox
+    gdd: design/gdd/히트박스-충돌-감지.md
+    requirement: "Iframes DURATION = 0.5초 — 피격 후 HurtboxArea2D.monitoring = false로 다단 피격 방지"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 플레이어 캐릭터 컨트롤러 (플레이어-캐릭터-컨트롤러.md) ───────────────
+
+  - id: TR-player-001
+    system: player
+    gdd: design/gdd/플레이어-캐릭터-컨트롤러.md
+    requirement: "PlayerController — CharacterBody2D 루트 + move_and_slide() 이동"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-player-002
+    system: player
+    gdd: design/gdd/플레이어-캐릭터-컨트롤러.md
+    requirement: "플레이어 씬 루트 구조가 동료·적과 동일 — CharacterBody2D + HealthComponent + HurtboxArea2D + HitboxArea2D"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-player-003
+    system: player
+    gdd: design/gdd/플레이어-캐릭터-컨트롤러.md
+    requirement: "HitboxArea2D는 공격 애니메이션 특정 프레임에서만 monitoring = true — 상시 활성 금지"
+    adr: ADR-0004
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 능력치 시스템 (능력치-시스템.md) ─────────────────────────────────────
+
+  - id: TR-stats-001
+    system: stats
+    gdd: design/gdd/능력치-시스템.md
+    requirement: "플레이어·동료·적 모두 동일한 CharacterStats Resource 클래스 사용 — 종류별 별도 클래스 금지"
+    adr: ADR-0005
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-stats-002
+    system: stats
+    gdd: design/gdd/능력치-시스템.md
+    requirement: "base_* + mod_* 두 층 구조 — base는 레벨업 시스템만 쓰고 mod는 버프/디버프가 쓴다"
+    adr: ADR-0005
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-stats-003
+    system: stats
+    gdd: design/gdd/능력치-시스템.md
+    requirement: "스탯 변경 시 stats_changed(stat_name: StringName) 신호 발행 — 다운스트림 매 프레임 폴링 금지"
+    adr: ADR-0005
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-stats-004
+    system: stats
+    gdd: design/gdd/능력치-시스템.md
+    requirement: "런타임 인스턴스는 stats_template.duplicate()로 생성 — .tres 템플릿 원본 런타임 수정 금지"
+    adr: ADR-0005
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 동료 AI (동료-AI-시스템.md) ──────────────────────────────────────────
+
+  - id: TR-ai-001
+    system: ai
+    gdd: design/gdd/동료-AI-시스템.md
+    requirement: "CompanionAI — NavigationAgent2D 기반 3-state FSM (FOLLOWING/CHASING/ATTACKING/DEAD), 동료 오프셋 대형"
+    adr: ADR-0006
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-ai-002
+    system: ai
+    gdd: design/gdd/동료-AI-시스템.md
+    requirement: "EnemyAI — NavigationAgent2D 기반 3-state FSM (IDLE/CHASING/ATTACKING/DEAD), 타겟 우선순위: 플레이어 > 가장 가까운 동료"
+    adr: ADR-0006
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── 실시간 파티 전투 (실시간-파티-전투.md) ───────────────────────────────
+
+  - id: TR-combat-001
+    system: combat
+    gdd: design/gdd/실시간-파티-전투.md
+    requirement: "CombatEncounter 노드 — 구역 내 모든 적 health_depleted() 수신 시 combat_cleared(encounter_id) 신호 발행"
+    adr: ADR-0006
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  - id: TR-combat-002
+    system: combat
+    gdd: design/gdd/실시간-파티-전투.md
+    requirement: "EnemySpawnZone — enemy_count = base_enemy_count(3) + companion_count × ENEMY_SCALE_PER_COMPANION(1) 동적 결정"
+    adr: ADR-0006
+    created: "2026-04-28"
+    revised: ""
+    status: active
+
+  # ─── SaveManager (퀘스트-상태-머신.md, 인벤토리-시스템.md, NPC-상태-관리.md, 동료-합류-이벤트.md) ───
+
+  - id: TR-save-001
+    system: save
+    gdd: design/gdd/퀘스트-상태-머신.md
+    requirement: "QuestManager quests 딕셔너리(quest_id → state_int) 저장 및 복원"
+    adr: ADR-0007
+    created: "2026-05-06"
+    revised: ""
+    status: active
+
+  - id: TR-save-002
+    system: save
+    gdd: design/gdd/인벤토리-시스템.md
+    requirement: "Inventory 아이템 목록(item_id, quantity) 저장 및 복원"
+    adr: ADR-0007
+    created: "2026-05-06"
+    revised: ""
+    status: active
+
+  - id: TR-save-003
+    system: save
+    gdd: design/gdd/NPC-상태-관리.md
+    requirement: "NPCRegistry NPC별 RelationshipState 저장 및 복원"
+    adr: ADR-0007
+    created: "2026-05-06"
+    revised: ""
+    status: active
+
+  - id: TR-save-004
+    system: save
+    gdd: design/gdd/동료-합류-이벤트.md
+    requirement: "PartyManager 파티 구성(companion_id 배열) 저장 및 복원"
+    adr: ADR-0007
+    created: "2026-05-06"
+    revised: ""
+    status: active
+
+  - id: TR-save-005
+    system: save
+    gdd: design/gdd/퀘스트-상태-머신.md
+    requirement: "플레이어 현재 씬 경로 + 스폰 포인트 이름 저장 및 로드 후 SceneTransitionManager로 복원"
+    adr: ADR-0007
+    created: "2026-05-06"
+    revised: ""
+    status: active
+
+  - id: TR-save-006
+    system: save
+    gdd: design/gdd/퀘스트-상태-머신.md
+    requirement: "has_save() — 저장 파일 없을 때 false, 로드 시도 시 무시"
+    adr: ADR-0007
+    created: "2026-05-06"
+    revised: ""
+    status: active

@@ -173,7 +173,7 @@ func _begin_fade_in() -> void:
 ## Resolution order (ADR-0003 TR-scene-004):
 ##   1. Marker2D named "SpawnPoint_{spawn_point_id}" if [param spawn_point_id] != "".
 ##   2. Marker2D named "SpawnPoint_Default" (fallback).
-##   3. push_warning + Vector2.ZERO if neither exists.
+##   3. push_error + Vector2.ZERO if neither exists.
 ##
 ## Example:
 ##   var pos: Vector2 = _resolve_spawn_position(
@@ -191,8 +191,8 @@ func _resolve_spawn_position(spawn_nodes: Array, spawn_point_id: String) -> Vect
 		if node is Marker2D and node.name == "SpawnPoint_Default":
 			return node.global_position
 
-	# 3. Neither found
-	push_warning(
+	# 3. Neither found — ADR-0003 requires push_error here (SpawnPoint_Default is mandatory)
+	push_error(
 			"SceneTransitionManager: no SpawnPoint_Default found in " +
 			"'spawn_points' group - placing player at Vector2.ZERO")
 	return Vector2.ZERO
