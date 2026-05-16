@@ -73,11 +73,11 @@ stories:
     name: "EventBus Foundation epic — story-001 autoload signal contract 구현"
     file: "production/epics/event-bus/story-001-autoload-signal-contract.md"
     priority: should-have
-    status: backlog
+    status: done
     owner: "godot-gdscript-specialist"
     estimate_days: 1.0
     blocker: ""
-    completed: ""
+    completed: "2026-05-01"
 
   - id: "S4-8"
     name: "Production 플레이테스트 세션 1회"
