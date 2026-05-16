@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://enemy_ai_scene"]
+
+[ext_resource type="Script" uid="uid://enemy_ai_gd" path="res://src/characters/enemy_ai.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cdkcb1qavdx8o" path="res://src/core/health_component.gd" id="2_health"]
+[ext_resource type="Resource" uid="uid://enemy_basic_stats_tres" path="res://assets/data/stats/enemy_basic_stats.tres" id="3_stats"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 10.0
+height = 20.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hurt"]
+radius = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detect"]
+radius = 150.0
+
+[node name="EnemyAI" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_script")
+stats = ExtResource("3_stats")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_health")
+stats = ExtResource("3_stats")
+hurtbox = NodePath("../HurtboxArea2D")
+
+[node name="HurtboxArea2D" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxArea2D"]
+shape = SubResource("CircleShape2D_hurt")
+
+[node name="HitboxArea2D" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea2D"]
+shape = SubResource("CircleShape2D_hit")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="AttackActiveTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+autostart = false
+
+[node name="DetectionArea2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea2D"]
+shape = SubResource("CircleShape2D_detect")

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cyfy2yftn7v5l"]
+
+[ext_resource type="PackedScene" uid="uid://c2vl7jxjjhbor" path="res://src/scenes/main_map.tscn" id="1_kvh4r"]
+[ext_resource type="Script" uid="uid://c3vw2kjmc5q6d" path="res://tests/scenes/perf/perf_stress_test.gd" id="2_script"]
+
+[node name="MainMap" unique_id=1453996933 instance=ExtResource("1_kvh4r")]
+
+[node name="Zone1" parent="EnemySpawnZones" parent_id_path=PackedInt32Array(394522197) index="0" unique_id=824643927]
+base_enemy_count = 9
+
+[node name="PerfStressSpawner" type="Node" parent="." index="6" unique_id=1065754349]
+script = ExtResource("2_script")

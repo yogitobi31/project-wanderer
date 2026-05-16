@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://qa_scene_a"]
+
+[ext_resource type="Script" path="res://tests/scenes/manual/test_player.gd" id="1_player"]
+[ext_resource type="Script" path="res://tests/scenes/manual/scene_a_controller.gd" id="2_ctrl"]
+
+[node name="SceneA" type="Node2D"]
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("2_ctrl")
+
+[node name="Label" type="Label" parent="."]
+position = Vector2(20, 20)
+text = "=== Scene A ==="
+
+[node name="Instructions" type="Label" parent="."]
+position = Vector2(20, 60)
+text = "TC-1/TC-3: [BtnFull]  TC-4: [BtnDefault]  TC-5: [BtnEmpty]  TC-2: trigger BtnFull then quickly press BtnInterrupt"
+
+[node name="BtnFull" type="Button" parent="."]
+position = Vector2(20, 120)
+size = Vector2(240, 40)
+text = "TC-1/TC-3: Go to SceneB_Full (inn)"
+
+[node name="BtnDefault" type="Button" parent="."]
+position = Vector2(20, 170)
+size = Vector2(240, 40)
+text = "TC-4: Go to SceneB_DefaultOnly (inn)"
+
+[node name="BtnEmpty" type="Button" parent="."]
+position = Vector2(20, 220)
+size = Vector2(240, 40)
+text = "TC-5: Go to SceneB_Empty (inn)"
+
+[node name="BtnInterrupt" type="Button" parent="."]
+position = Vector2(20, 270)
+size = Vector2(240, 40)
+text = "TC-2: INTERRUPT (press during transition)"
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="SpawnPoint_Default" type="Marker2D" parent="SpawnPoints" groups=["spawn_points"]]
+position = Vector2(50, 50)
+
+[node name="Player" type="Node2D" parent="."]
+script = ExtResource("1_player")
+position = Vector2(100, 100)
+
+[connection signal="pressed" from="BtnFull" to="Controller" method="_on_btn_to_b_full_pressed"]
+[connection signal="pressed" from="BtnDefault" to="Controller" method="_on_btn_to_b_default_pressed"]
+[connection signal="pressed" from="BtnEmpty" to="Controller" method="_on_btn_to_b_empty_pressed"]
+[connection signal="pressed" from="BtnInterrupt" to="Controller" method="_on_btn_interrupt_pressed"]

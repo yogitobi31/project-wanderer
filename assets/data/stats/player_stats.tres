@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/stats/character_stats.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+base_max_hp = 80
+base_atk = 20
+base_def = 8
+base_spd = 130.0

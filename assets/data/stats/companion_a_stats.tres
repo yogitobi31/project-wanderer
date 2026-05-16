@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3 uid="uid://companion_a_stats_tres"]
+
+[ext_resource type="Script" uid="uid://dqbal4q2s80nw" path="res://src/core/stats/character_stats.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+base_max_hp = 60
+base_atk = 15
+base_def = 6
+base_spd = 110.0
