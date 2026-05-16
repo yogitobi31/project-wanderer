@@ -43,11 +43,11 @@ stories:
     name: "Pillar 3 팀 게이트 설계 문서"
     file: "design/gdd/팀-게이트-조건.md"
     priority: must-have
-    status: ready-for-dev
+    status: done
     owner: "game-designer"
     estimate_days: 1.0
     blocker: ""
-    completed: ""
+    completed: "2026-05-16"
 
   - id: "S5-5"
     name: "GDD-구현 일치 검증"
