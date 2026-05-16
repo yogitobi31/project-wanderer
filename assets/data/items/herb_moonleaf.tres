@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://3drjllsp7k1r" path="res://src/core/item_definition.gd" id="1_herb_moonleaf"]
+
+[resource]
+script = ExtResource("1_herb_moonleaf")
+item_id = &"herb_moonleaf"
+display_name = "달빛 약초"
+description = "달빛 아래에서만 피어나는 희귀한 약초."
+category = 1
+is_quest_item = true
+stackable = true
+max_stack = 99
+quest_tags = [&"quest_jin_herb"]
+source_companion_id = &"companion_jin"
+source_quest_id = &"quest_jin_herb"
+effect_type = 0
+effect_value = 0.0

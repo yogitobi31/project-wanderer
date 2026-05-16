@@ -1,0 +1,1 @@
+- [Foundation Sprint QA State](project_foundation_sprint_state.md) — Smoke check verdict, open manual QA obligations, and tech debt from the 13-story Foundation sprint (2026-05-03)

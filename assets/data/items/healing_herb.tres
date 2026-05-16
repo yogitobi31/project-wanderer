@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://3drjllsp7k1r" path="res://src/core/item_definition.gd" id="1_healing_herb"]
+
+[resource]
+script = ExtResource("1_healing_herb")
+item_id = &"healing_herb"
+display_name = "치유 약초"
+description = "섭취하면 체력을 회복한다."
+category = 2
+is_quest_item = false
+stackable = true
+max_stack = 20
+quest_tags = []
+source_companion_id = &""
+source_quest_id = &""
+effect_type = 1
+effect_value = 50.0

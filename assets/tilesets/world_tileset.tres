@@ -1,0 +1,23 @@
+[gd_resource type="TileSet" format=3 uid="uid://b3nf5mxkq4a7w"]
+
+[ext_resource type="Texture2D" uid="uid://0u5yoyi4uvc2" path="res://assets/tilesets/tiles_placeholder.png" id="1_tex"]
+
+[sub_resource type="NavigationPolygon" id="NavPoly_grass"]
+vertices = PackedVector2Array(0, 0, 16, 0, 16, 16, 0, 16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+
+[sub_resource type="NavigationPolygon" id="NavPoly_path"]
+vertices = PackedVector2Array(0, 0, 16, 0, 16, 16, 0, 16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1"]
+texture = ExtResource("1_tex")
+0:0/0 = 0
+0:0/0/navigation_layer_0/polygon = SubResource("NavPoly_grass")
+1:0/0 = 0
+2:0/0 = 0
+2:0/0/navigation_layer_0/polygon = SubResource("NavPoly_path")
+
+[resource]
+navigation_layer_0/layers = 1
+sources/0 = SubResource("TileSetAtlasSource_1")

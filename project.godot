@@ -1,0 +1,37 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="유랑단"
+run/main_scene="res://tests/scenes/manual/SceneA.tscn"
+config/features=PackedStringArray("4.6", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+EventBus="*res://src/core/event_bus.gd"
+ItemDB="*res://src/core/item_db.gd"
+NPCRegistry="*res://src/core/npc_registry.gd"
+PartyManager="*res://src/core/party_manager.gd"
+Inventory="*res://src/core/inventory.gd"
+InputMapManager="*res://src/core/input_map_manager.gd"
+SceneTransitionManager="*res://src/core/scene_transition_manager.gd"
+DialogueManager="*res://src/ui/dialogue_manager.gd"
+SaveManager="*res://src/core/save_manager.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

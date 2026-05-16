@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://prototypes/spike-grab-focus/spike_focus_controller.gd" id="1"]
+[ext_resource type="Script" path="res://prototypes/spike-grab-focus/spike_focus_runner.gd" id="2"]
+
+[node name="SpikeGrabFocus" type="Node"]
+script = ExtResource("1")
+
+[node name="Runner" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="HealthBar" type="Button" parent="HUD"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 120.0
+offset_bottom = 50.0
+focus_mode = 2
+text = "HP: 100"
+
+[node name="DebugLabel" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 700.0
+offset_bottom = 95.0
+text = "Focus: -"
+
+[node name="LogLabel" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 100.0
+offset_right = 700.0
+offset_bottom = 200.0
+autowrap_mode = 3
+text = "(F3: 포커스 덤프  ↓: 포커스 이동 확인)"
+
+[node name="KeyHints" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 210.0
+offset_right = 700.0
+offset_bottom = 235.0
+text = "F1: 대화창 열기  |  F2/ESC: 닫기  |  F3: 로그 덤프  |  ↓: 포커스 이동 확인"
+
+[node name="DialogueLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="DialoguePanel" type="Control" parent="DialogueLayer"]
+offset_left = 100.0
+offset_top = 300.0
+offset_right = 540.0
+offset_bottom = 450.0
+visible = false
+
+[node name="Background" type="ColorRect" parent="DialogueLayer/DialoguePanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.1, 0.9)
+
+[node name="DialogueText" type="Label" parent="DialogueLayer/DialoguePanel"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 420.0
+offset_bottom = 80.0
+text = "동료: \"같이 가도 될까요?\""
+
+[node name="ChoiceButton" type="Button" parent="DialogueLayer/DialoguePanel"]
+offset_left = 20.0
+offset_top = 90.0
+offset_right = 240.0
+offset_bottom = 125.0
+focus_mode = 2
+text = "네, 함께 가요"

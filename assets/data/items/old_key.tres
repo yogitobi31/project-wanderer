@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://3drjllsp7k1r" path="res://src/core/item_definition.gd" id="1_old_key"]
+
+[resource]
+script = ExtResource("1_old_key")
+item_id = &"old_key"
+display_name = "낡은 열쇠"
+description = "오래된 자물쇠를 열 수 있을 것 같다."
+category = 0
+is_quest_item = true
+stackable = false
+max_stack = 1
+quest_tags = [&"quest_old_door"]
+source_companion_id = &""
+source_quest_id = &""
+effect_type = 0
+effect_value = 0.0

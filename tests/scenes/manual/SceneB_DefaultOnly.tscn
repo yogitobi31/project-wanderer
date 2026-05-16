@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://qa_scene_b_default"]
+
+[ext_resource type="Script" path="res://tests/scenes/manual/test_player.gd" id="1_player"]
+[ext_resource type="Script" path="res://tests/scenes/manual/scene_b_controller.gd" id="2_ctrl"]
+
+[node name="SceneB_DefaultOnly" type="Node2D"]
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("2_ctrl")
+
+[node name="Label" type="Label" parent="."]
+position = Vector2(20, 20)
+text = "=== Scene B Default Only ===  (SpawnPoint_Default=100,100 — no SpawnPoint_inn)"
+
+[node name="BtnBack" type="Button" parent="."]
+position = Vector2(20, 60)
+size = Vector2(200, 40)
+text = "Back to SceneA"
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="SpawnPoint_Default" type="Marker2D" parent="SpawnPoints" groups=["spawn_points"]]
+position = Vector2(100, 100)
+
+[node name="Player" type="Node2D" parent="."]
+script = ExtResource("1_player")
+
+[connection signal="pressed" from="BtnBack" to="Controller" method="_on_btn_back_pressed"]
