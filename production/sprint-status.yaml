@@ -11,13 +11,13 @@ updated: "2026-05-16"
 stories:
   - id: "S5-1"
     name: "플레이어블 루프 통합 검증"
-    file: "tests/integration/full_loop/"
+    file: "tests/integration/full_loop/core_loop_integration_test.gd"
     priority: must-have
-    status: ready-for-dev
+    status: done
     owner: "godot-gdscript-specialist"
     estimate_days: 1.5
     blocker: ""
-    completed: ""
+    completed: "2026-05-16"
 
   - id: "S5-2"
     name: "S4-8 플레이테스트 세션 완료"
