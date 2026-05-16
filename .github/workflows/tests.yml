@@ -1,0 +1,59 @@
+name: Automated Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run GUT Tests (Godot 4.6)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Godot binary
+        uses: actions/cache@v4
+        id: cache-godot
+        with:
+          path: ~/.local/share/godot
+          key: godot-4.6.0-linux
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.6.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Import project (generate .godot cache)
+        run: |
+          godot --headless --path . --import || true
+
+      - name: Run GUT unit tests
+        run: |
+          godot --headless --path . \
+            -s addons/gut/gut_cmdln.gd \
+            -gdir=res://tests/unit \
+            -ginclude_subdirs \
+            -gexit \
+            -glog=2 \
+            -gprefix=test_ \
+            -gsuffix=.gd
+
+      - name: Run GUT integration tests
+        if: ${{ hashFiles('tests/integration/**/*.gd') != '' }}
+        run: |
+          godot --headless --path . \
+            -s addons/gut/gut_cmdln.gd \
+            -gdir=res://tests/integration \
+            -ginclude_subdirs \
+            -gexit \
+            -glog=2 \
+            -gprefix=test_ \
+            -gsuffix=.gd
